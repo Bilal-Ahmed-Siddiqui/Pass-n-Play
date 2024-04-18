@@ -7,17 +7,19 @@ const jwt = require("jsonwebtoken");
 
 const JWT_SECRET_KEY = "thatsmykey";
 
-//sign up POST '/api/auth/', doesnt req auth
+//sign up POST '/api/auth/signup', doesnt req auth
 router.post(
-  "/",
+  "/signup",
   [
-    body("name").isLength({ min: 5 }),
-    body("email").isEmail(),
-    body("password").isLength({ min: 5 }),
+    body("name", "name must be bigger than 5 letters").isLength({ min: 5 }),
+    body("email", "enter a valid email").isEmail(),
+    body("password", "password must be bigger than 5 letters").isLength({
+      min: 5,
+    }),
   ],
   async (req, res) => {
-    const result = validationResult(req);
-    if (result.isEmpty()) {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
       const { name, email, password } = req.body;
 
       //hashing password
@@ -37,9 +39,40 @@ router.post(
         id: newUser.id,
       };
       const authtoken = jwt.sign(UID, JWT_SECRET_KEY);
-      res.json({authtoken});
+      res.json({ authtoken });
     } else {
-      res.send("some internal error");
+      return res.status(400).json({ error: errors.array() });
+    }
+  }
+);
+
+//sign up POST '/api/auth/login', doesnt req auth
+router.post(
+  "/login",
+  body("email", "enter a valid email").isEmail(),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const { email, password } = req.body;
+      try {
+        let user = await User.findOne({ email });
+        if (!user) {
+          return res.status(400).json({ error: "Wrong email or password" });
+        }
+        const passCheck = await bcrypt.compare(password, user.password);
+        if (!passCheck) {
+          return res.status(400).json({ error: "Wrong email or password" });
+        }
+        const UID = {
+            id: user.id,
+          };
+          const authtoken = jwt.sign(UID, JWT_SECRET_KEY);
+          res.json({ authtoken });
+      } catch (error) {
+        return res.json({ error: error.message });
+      }
+    } else {
+      return res.status(400).json({ error: errors.array() });
     }
   }
 );
