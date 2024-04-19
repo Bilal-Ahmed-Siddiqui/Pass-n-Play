@@ -27,6 +27,10 @@ const PostSchema = new Schema({
     type: Number,
     required: true,
   },
+  image: {
+    data: Buffer, // Store image data as Buffer
+    contentType: String, // MIME type of the image
+  },
   timeStamp: {
     type: Date,
     default: Date.now,
