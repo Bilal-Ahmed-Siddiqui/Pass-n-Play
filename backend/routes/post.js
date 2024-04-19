@@ -122,4 +122,23 @@ router.put(
   }
 );
 
+// delete user post, delete, '/api/post/delete/:id'
+router.delete("/delete/:id", fetchUser, async (req, res) => {
+  try {
+    let post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).send("Post Not Found!");
+    }
+    if (req.user.id !== post.user.toString()) {
+      return res.status(401).send("UnAuthorized Access!");
+    }
+    post = await Post.findByIdAndDelete(req.params.id);
+    res.send("post deleted");
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error!");
+  }
+});
+
 module.exports = router;
