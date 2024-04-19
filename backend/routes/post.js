@@ -59,5 +59,15 @@ router.post(
   }
 );
 
+// fetch user posts, GET, '/api/post/userposts'
+router.get("/userposts", fetchUser, async (req, res) => {
+  try {
+    const posts = await Post.find({ user: req.user.id });
+    res.json({ posts: posts });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error!");
+  }
+});
 
 module.exports = router;
