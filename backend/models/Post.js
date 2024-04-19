@@ -1,9 +1,8 @@
-const { getByTitle } = require("@testing-library/react");
 const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 //title, description, condition, rentperiod, images, price, location, timestamp
-const PostSchema = new schema({
+const PostSchema = new Schema({
   title: {
     type: String,
     required: true,
