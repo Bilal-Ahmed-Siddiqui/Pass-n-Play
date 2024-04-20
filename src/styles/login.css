@@ -47,7 +47,7 @@
   font-size: 30px;
   color: burlywood;
 }
-.separator {
+.separator-login {
   width: 3px; /* Thickness of the separator */
   height: 80%;
   background-color: white; /* Separator color */

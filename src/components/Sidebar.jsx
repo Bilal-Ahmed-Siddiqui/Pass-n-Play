@@ -20,7 +20,7 @@ const Sidebar = ({ isOpen, toggle }) => {
           ×
         </button>
       </div>
-      <div className="separator"></div>
+      <div className="separator-sidebar"></div>
       <ul className="list-group">
         <Link to="/" className="text-decoration-none link" onClick={toggle}>
           <div className="list-group-item">

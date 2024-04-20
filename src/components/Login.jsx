@@ -10,7 +10,7 @@ const Login = () => {
         </p>
         <p className="tagline">Dont just play.. Pass n Play</p>
       </div>
-      <div className="separator"></div>
+      <div className="separator-login"></div>
       <div className="right">
         <div className="loginform">
           <h2>Login</h2>
