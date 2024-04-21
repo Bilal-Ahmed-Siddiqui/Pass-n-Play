@@ -24,6 +24,16 @@
   background-color: #fff;
   color: black;
 }
+
+.loginform h2 {
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #888;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
 .left {
   width: calc(50% - 1px); /* Adjust width to accommodate separator */
   height: 100%;
@@ -75,11 +85,6 @@ button:hover {
   background-color: #0056b3; /* Example button color on hover */
 }
 
-.loginform h2 {
-  text-align: center;
-  padding-top: 15px;
-}
-
 .loginform button {
   margin-top: 20px;
   margin-left: 10%;
@@ -87,11 +92,11 @@ button:hover {
   width: 80%;
 }
 
-.loginform p{
-    text-align: center;
-    margin-top: 10px;
+.loginform p {
+  text-align: center;
+  margin-top: 10px;
 }
 
-.link{
-    color: burlywood;
+.link {
+  color: burlywood;
 }
