@@ -99,4 +99,8 @@ button:hover {
 
 .link {
   color: burlywood;
+  cursor: pointer;
+}
+.link:hover {
+  text-decoration: underline;
 }
