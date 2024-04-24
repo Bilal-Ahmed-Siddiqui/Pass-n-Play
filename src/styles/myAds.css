@@ -1,0 +1,14 @@
+.Ad-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .Ad-header h2 {
+    margin: 0;
+  }
+  
+  .Ad-header i {
+    font-size: 1.5rem;
+  }
+  
