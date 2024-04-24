@@ -3,71 +3,28 @@ import { createContext, useState } from "react";
 const postsContext = createContext();
 
 export const PostsState = (props) => {
-  const initialState = [
-    {
-      _id: "662207912f95831f78274932",
-      user: "6621e5bdf8210fbb7537b677",
-      title: "God of War: Ragnarok",
-      description: "GoW DvD for Ps4",
-      location: "Karachi",
-      condition: "Used",
-      rentPeriod: 2,
-      price: 4000,
-      timeStamp: "2024-04-19T05:56:33.361Z",
-      __v: 0,
-    },
-    {
-      _id: "662207912f95831f78274932",
-      user: "6621e5bdf8210fbb7537b677",
-      title: "God of War: Ragnarok",
-      description: "GoW DvD for Ps4",
-      location: "Karachi",
-      condition: "Used",
-      rentPeriod: 2,
-      price: 4000,
-      timeStamp: "2024-04-19T05:56:33.361Z",
-      __v: 0,
-    },
-    {
-      _id: "662207912f95831f78274932",
-      user: "6621e5bdf8210fbb7537b677",
-      title: "God of War: Ragnarok",
-      description: "GoW DvD for Ps4",
-      location: "Karachi",
-      condition: "Used",
-      rentPeriod: 2,
-      price: 4000,
-      timeStamp: "2024-04-19T05:56:33.361Z",
-      __v: 0,
-    },
-    {
-      _id: "662207912f95831f78274932",
-      user: "6621e5bdf8210fbb7537b677",
-      title: "God of War: Ragnarok",
-      description: "GoW DvD for Ps4",
-      location: "Karachi",
-      condition: "Used",
-      rentPeriod: 2,
-      price: 4000,
-      timeStamp: "2024-04-19T05:56:33.361Z",
-      __v: 0,
-    },
-    {
-      _id: "662207912f95831f78274932",
-      user: "6621e5bdf8210fbb7537b677",
-      title: "God of War: Ragnarok",
-      description: "GoW DvD for Ps4",
-      location: "Karachi",
-      condition: "Used",
-      rentPeriod: 2,
-      price: 4000,
-      timeStamp: "2024-04-19T05:56:33.361Z",
-      __v: 0,
-    },
-  ];
-  const [posts, setposts] = useState(initialState);
+  const [posts, setposts] = useState([]);
+  const url = "http://localhost:8000";
+
+  //api call fetch all
+  const fetchAll = async () => {
+     //api call
+     const response = await fetch(`${url}/api/post/fetchall`, {
+      method: "GET",
+      headers: { "Content-Type": "Application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    //update client side
+    const data = await response.json();
+    setposts(data);
+  };
+
   return (
-    <postsContext.Provider value={{ posts, setposts }}>
+    <postsContext.Provider value={{ posts, setposts, fetchAll }}>
       {props.children}
     </postsContext.Provider>
   );
