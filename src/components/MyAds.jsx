@@ -8,7 +8,7 @@ import postsContext from "../context/postsContext";
 const MyAds = () => {
   const [isOpen, setIsOpen] = useState(false);
   const context = useContext(postsContext);
-  const { userposts, fetchUserPost } = context;
+  const { userposts, fetchUserPost, deletePost } = context;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -17,6 +17,13 @@ const MyAds = () => {
     console.log(isOpen);
   };
 
+  const handleEdit = async (id) => {
+    console.log(id);
+  };
+  const handleDelete = async (id) => {
+    deletePost(id);
+    console.log(id);
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,13 +62,49 @@ const MyAds = () => {
             <h5>{error}</h5>
           </div>
         ) : (
-          userposts.map((userposts) => (
-            <Post
-              id={userposts._id}
-              title={userposts.title}
-              price={userposts.price}
-            ></Post>
-          ))
+          <div className="myad-box">
+            {userposts.map((userpost) => (
+              <div key={userpost._id} className="post-wrapper">
+                <div className="dropdown">
+                  <button
+                    className="btn btn-secondary dropdown-toggle"
+                    type="button"
+                    id={`dropdownMenuButton_${userpost._id}`}
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    &#10247;
+                  </button>
+                  <ul
+                    className="dropdown-menu"
+                    aria-labelledby={`dropdownMenuButton_${userpost._id}`}
+                  >
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        onClick={() => handleEdit(userpost._id)}
+                      >
+                        Edit Ad
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        onClick={() => handleDelete(userpost._id)}
+                      >
+                        Delete Ad
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <Post
+                  id={userpost._id}
+                  title={userpost.title}
+                  price={userpost.price}
+                />
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </>
