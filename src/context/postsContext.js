@@ -45,6 +45,27 @@ export const PostsState = (props) => {
     setuserposts(data);
   };
 
+  //api call delete post
+  const deletePost = async (id) => {
+    //api call
+    const response = await fetch(`${url}/api/post/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "Application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYyMWU1YmRmODIxMGZiYjc1MzdiNjc3In0sImlhdCI6MTcxMzQ5NzY0Nn0.laVpWmPL77Hl7zO4_kIENVsadI1dKSGyspcqaGRsl8o",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete Ad!");
+    }
+
+    //update client side
+    const data = await response.json();
+    alert(data);
+  };
+
   return (
     <postsContext.Provider
       value={{
@@ -54,6 +75,7 @@ export const PostsState = (props) => {
         userposts,
         setuserposts,
         fetchUserPost,
+        deletePost,
       }}
     >
       {props.children}

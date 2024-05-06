@@ -4,7 +4,6 @@
   }
   
   .post-card {
-    flex: 0 0 calc(33.33% - 1rem); /* Adjust as needed */
     margin: 0.5rem;
     background-color: #464e57;
     color: white;
