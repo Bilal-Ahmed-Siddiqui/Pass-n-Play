@@ -5,6 +5,8 @@ const postsContext = createContext();
 export const PostsState = (props) => {
   const [posts, setposts] = useState([]);
   const [userposts, setuserposts] = useState([]);
+  const [postbyID, setpostbyID] = useState([]);
+  const [deleteStatus, setdeleteStatus] = useState();
   const url = "http://localhost:8000";
 
   //api call fetch all
@@ -24,6 +26,23 @@ export const PostsState = (props) => {
     setposts(data);
   };
 
+  //api call fetch post by id
+  const fetchbyID = async (id) => {
+    //api call
+    const response = await fetch(`${url}/api/post/${id}`, {
+      method: "GET",
+      headers: { "Content-Type": "Application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    //update client side
+    const data = await response.json();
+    setpostbyID(data);
+  };
+
   //api call fetch user post
   const fetchUserPost = async () => {
     //api call
@@ -31,8 +50,7 @@ export const PostsState = (props) => {
       method: "GET",
       headers: {
         "Content-Type": "Application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYyMWU1YmRmODIxMGZiYjc1MzdiNjc3In0sImlhdCI6MTcxMzQ5NzY0Nn0.laVpWmPL77Hl7zO4_kIENVsadI1dKSGyspcqaGRsl8o",
+        "auth-token": localStorage.getItem("token"),
       },
     });
 
@@ -52,8 +70,7 @@ export const PostsState = (props) => {
       method: "DELETE",
       headers: {
         "Content-Type": "Application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjYyMWU1YmRmODIxMGZiYjc1MzdiNjc3In0sImlhdCI6MTcxMzQ5NzY0Nn0.laVpWmPL77Hl7zO4_kIENVsadI1dKSGyspcqaGRsl8o",
+        "auth-token": localStorage.getItem("token"),
       },
     });
 
@@ -63,7 +80,49 @@ export const PostsState = (props) => {
 
     //update client side
     const data = await response.json();
-    alert(data);
+    setdeleteStatus(data);
+  };
+
+  //api call create new post
+  const CreatePost = async (Post) => {
+    //api call
+    const response = await fetch(`${url}/api/post/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "Application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+      body: JSON.stringify(Post),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to Post Ad");
+    }
+
+    //update client side
+    // const data = await response.json();
+    // setuserposts(data);
+  };
+
+  //api call create new post
+  const UpdatePost = async (id, Post) => {
+    //api call
+    const response = await fetch(`${url}/api/post/update/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "Application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+      body: JSON.stringify(Post),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to Edit Ad");
+    }
+
+    // update client side
+    // const data = await response.json();
+    // setuserposts(data);
   };
 
   return (
@@ -76,6 +135,11 @@ export const PostsState = (props) => {
         setuserposts,
         fetchUserPost,
         deletePost,
+        CreatePost,
+        fetchbyID,
+        postbyID,
+        deleteStatus,
+        UpdatePost,
       }}
     >
       {props.children}

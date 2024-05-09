@@ -1,14 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "../styles/newAd.css";
 import postsContext from "../context/postsContext";
+import { useParams } from "react-router-dom";
 
-const NewAd = (props) => {
-  const { isOpen, setIsOpen } = props;
+const EditAd = () => {
+  const { postId } = useParams();
+
   const context = useContext(postsContext);
-  const { CreatePost, fetchUserPost } = context;
-  const toggleModal = () => {
-    setIsOpen(!isOpen);
-  };
+  const { UpdatePost, fetchUserPost, fetchbyID, postbyID } = context;
+
   const [postData, setpostData] = useState({
     title: "",
     // image: "",
@@ -18,6 +18,18 @@ const NewAd = (props) => {
     condition: "",
     price: "",
   });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await fetchbyID(postId);
+        setpostData(postbyID);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+    // eslint-disable-next-line
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,18 +38,16 @@ const NewAd = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await CreatePost(postData);
-    toggleModal();
+    await UpdatePost(postData);
     await fetchUserPost();
-
   };
   return (
-    <div className={`modal ${isOpen ? "open" : ""}`} style={{ zIndex: 3 }}>
+    <div className="" style={{ zIndex: 3 }}>
       <div className="modal-content">
-        <i className="bi bi-x close" onClick={toggleModal}></i>
+        <i className="bi bi-x close"></i>
 
         <div className="modal-header">
-          <h3>Add a New Listing</h3>
+          <h3>Edit Your Listing</h3>
         </div>
         <div className="modal-body">
           <form onSubmit={handleSubmit}>
@@ -161,4 +171,4 @@ const NewAd = (props) => {
   );
 };
 
-export default NewAd;
+export default EditAd;

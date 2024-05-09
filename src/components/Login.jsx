@@ -1,13 +1,38 @@
 import React, { useState } from "react";
 import "../styles/login.css";
-import { Link } from "react-router-dom";
 import Singup from "./Signup";
+import { useNavigate } from 'react-router-dom';
+
 const Login = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [Creds, setCreds] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
-    console.log(isOpen);
+  };
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const response = await fetch("http://localhost:8000/api/auth/login", {
+      method: "Post",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify(Creds),
+    });
+    const json = await response.json();
+    if (json.success) {
+      //redirect to home page
+      localStorage.setItem("token", json.authtoken);
+      navigate('/');
+      
+    } else {
+      alert(json.error);
+    }
+  };
+
+  const onChange = (e) => {
+    setCreds({ ...Creds, [e.target.name]: e.target.value });
   };
   return (
     <>
@@ -22,13 +47,15 @@ const Login = () => {
         <div className="right">
           <div className="loginform">
             <h2>Login</h2>
-            <form>
+            <form onSubmit={handleLogin}>
               <div className="form-group">
                 <input
                   type="email"
                   id="email"
                   name="email"
                   placeholder="Email"
+                  value={Creds.email}
+                  onChange={onChange}
                 />
               </div>
               <div className="form-group">
@@ -37,6 +64,8 @@ const Login = () => {
                   id="password"
                   name="password"
                   placeholder="Password"
+                  value={Creds.password}
+                  onChange={onChange}
                 />
               </div>
               <button type="submit" className="btn-primary btn">
@@ -53,7 +82,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <Singup isOpen={isOpen} setIsOpen={setIsOpen}/>
+      <Singup isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );
 };

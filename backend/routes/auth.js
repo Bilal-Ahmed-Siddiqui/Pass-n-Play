@@ -21,6 +21,7 @@ router.post(
   async (req, res) => {
     try {
       const errors = validationResult(req);
+      let success = false;
       if (errors.isEmpty()) {
         const { name, email, password } = req.body;
 
@@ -38,14 +39,18 @@ router.post(
 
         //token generation
         const UID = {
-          user:{
+          user: {
             id: newUser.id,
-          }
+          },
         };
         const authtoken = jwt.sign(UID, JWT_SECRET_KEY);
-        res.json({ authtoken });
+        success = true;
+        res.json({ success, authtoken });
       } else {
-        return res.status(400).json({ error: errors.array() });
+        success = false;
+        return res
+          .status(400)
+          .json({ success: success, error: errors.array() });
       }
     } catch (error) {
       console.error(error.message);
@@ -61,29 +66,41 @@ router.post(
   async (req, res) => {
     try {
       const errors = validationResult(req);
+      let success = false;
       if (errors.isEmpty()) {
         const { email, password } = req.body;
         try {
           let user = await User.findOne({ email });
           if (!user) {
-            return res.status(400).json({ error: "Wrong email or password" });
+            success = false;
+            return res
+              .status(400)
+              .json({ success: success, error: "Wrong email or password" });
           }
           const passCheck = await bcrypt.compare(password, user.password);
           if (!passCheck) {
-            return res.status(400).json({ error: "Wrong email or password" });
+            success = false;
+
+            return res
+              .status(400)
+              .json({ success: success, error: "Wrong email or password" });
           }
           const UID = {
-            user:{
+            user: {
               id: user.id,
-            }
+            },
           };
           const authtoken = jwt.sign(UID, JWT_SECRET_KEY);
-          res.json({ authtoken });
+          success = true;
+          res.json({ success, authtoken });
         } catch (error) {
           return res.json({ error: error.message });
         }
       } else {
-        return res.status(400).json({ error: errors.array() });
+        success = false;
+        return res
+          .status(400)
+          .json({ success: success, error: errors.array() });
       }
     } catch (error) {
       console.error(error.message);

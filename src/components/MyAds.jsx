@@ -2,50 +2,54 @@ import React, { useState, useContext, useEffect } from "react";
 import Navbar from "./Navbar";
 import Post from "./Post";
 import NewAd from "./NewAd";
+import EditAd from "./EditAd";
 import "../styles/myAds.css";
 import postsContext from "../context/postsContext";
+import { useNavigate } from "react-router-dom";
 
 const MyAds = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpennew, setIsOpennew] = useState(false);
   const context = useContext(postsContext);
-  const { userposts, fetchUserPost, deletePost } = context;
+  const { userposts, fetchUserPost, deletePost, deleteStatus } = context;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const toggleModal = () => {
-    setIsOpen(!isOpen);
-    console.log(isOpen);
+  const toggleModalNew = () => {
+    setIsOpennew(!isOpennew);
   };
 
-  const handleEdit = async (id) => {
-    console.log(id);
-  };
   const handleDelete = async (id) => {
-    deletePost(id);
-    console.log(id);
+    await deletePost(id);
+    alert(deleteStatus);
+    await fetchUserPost();
   };
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        await fetchUserPost();
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Failed to fetch data. Please try again later.");
-        setLoading(false);
+      if (localStorage.getItem("token")) {
+        try {
+          await fetchUserPost();
+          setLoading(false);
+        } catch (error) {
+          setError("Failed to fetch data. Please try again later.");
+          setLoading(false);
+        }
+      } else {
+        navigate("/login");
       }
     };
 
     fetchData();
+    // eslint-disable-next-line
   }, []);
   return (
     <>
       <Navbar></Navbar>
       <div className="Ad-header box">
         <h2>Your Uploaded Adverts</h2>
-        <i className="bi bi-plus-square" onClick={toggleModal}></i>
+        <i className="bi bi-plus-square" onClick={toggleModalNew}></i>
       </div>
-      <NewAd isOpen={isOpen} setIsOpen={setIsOpen} />
+      <NewAd isOpen={isOpennew} setIsOpen={setIsOpennew} />
       <div className="post-container">
         {loading ? (
           <div className="preloader text-center container-fluid my-3">
@@ -82,23 +86,23 @@ const MyAds = () => {
                     <li>
                       <a
                         className="dropdown-item"
-                        onClick={() => handleEdit(userpost._id)}
+                        href={`/editpost/${userpost._id}`}
                       >
                         Edit Ad
                       </a>
                     </li>
                     <li>
-                      <a
+                      <button
                         className="dropdown-item"
                         onClick={() => handleDelete(userpost._id)}
                       >
                         Delete Ad
-                      </a>
+                      </button>
                     </li>
                   </ul>
                 </div>
                 <Post
-                  id={userpost._id}
+                  _id={userpost._id}
                   title={userpost.title}
                   price={userpost.price}
                 />

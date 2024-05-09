@@ -70,6 +70,22 @@ router.get("/userposts", fetchUser, async (req, res) => {
   }
 });
 
+// fetch post by id, GET, '/api/post/id'
+router.get("/:postId", async (req, res) => {
+  try {
+    const post = await Post.findById({ _id: req.params.postId });
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.json(post);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error!");
+  }
+});
+
 // Update user post, PUT, '/api/post/update/:id'
 router.put(
   "/update/:id",
@@ -134,7 +150,6 @@ router.delete("/delete/:id", fetchUser, async (req, res) => {
     }
     post = await Post.findByIdAndDelete(req.params.id);
     res.send("post deleted");
-
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error!");
