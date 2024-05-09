@@ -5,7 +5,8 @@ import NotFound from "./components/NotFound";
 import MyAds from "./components/MyAds";
 import PostDetails from "./components/PostDetails";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import postsContext, { PostsState } from "./context/postsContext";
+import { PostsState } from "./context/postsContext";
+import EditAd from "./components/EditAd";
 
 function App() {
   return (
@@ -15,7 +16,8 @@ function App() {
           <Route path="/" exact element={<Home />} />
           <Route path="/Login" exact element={<Login />} />
           <Route path="/About" exact element={<About />} />
-          <Route path="/PostDetails" exact element={<PostDetails />} />
+          <Route path="/Posts/:postId" exact element={<PostDetails />} />
+          <Route path="/editpost/:postId" exact element={<EditAd />} />
           <Route path="/MyAds" exact element={<MyAds />} />
           <Route path="*" exact element={<NotFound />} />
         </Routes>
