@@ -16,6 +16,7 @@ app.get("/", (req, res) => {
 //routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/post", require("./routes/post"));
+app.use("/api/order", require("./routes/order"));
 
 app.listen(port, () => {
   console.log(`Pass n Play listening on http://localhost:${port}`);
