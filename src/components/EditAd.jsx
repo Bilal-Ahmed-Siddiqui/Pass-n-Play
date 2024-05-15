@@ -11,25 +11,35 @@ const EditAd = () => {
 
   const [postData, setpostData] = useState({
     title: "",
-    // image: "",
     description: "",
     rentPeriod: "",
     location: "",
     condition: "",
-    price: "",
+    rentPrice: "",
+    depositPrice: "",
   });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         await fetchbyID(postId);
-        setpostData(postbyID);
+        console.log(postbyID)
+        await setpostData({
+          title: postbyID.title || "",
+          description: postbyID.description || "",
+          rentPeriod: postbyID.rentPeriod || "",
+          location: postbyID.location || "",
+          condition: postbyID.condition || "",
+          rentPrice: postbyID.rentPrice || "",
+          depositPrice: postbyID.depositPrice || "",
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
     // eslint-disable-next-line
-  }, []);
+  }, [postId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -37,10 +47,12 @@ const EditAd = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(postData)
     e.preventDefault();
-    await UpdatePost(postData);
+    await UpdatePost(postId,postData);
     await fetchUserPost();
   };
+
   return (
     <div className="" style={{ zIndex: 3 }}>
       <div className="modal-content">
@@ -146,15 +158,29 @@ const EditAd = () => {
                 </select>
               </div>
               <div className="mb-3 col">
-                <label htmlFor="price" className="form-label">
-                  Price (Pkr/Month)
+                <label htmlFor="rentPrice" className="form-label">
+                  Rent Price (Pkr/Month)
                 </label>
                 <input
                   type="number"
                   className="form-control"
-                  id="price"
-                  name="price"
-                  value={postData.price}
+                  id="rentPrice"
+                  name="rentPrice"
+                  value={postData.rentPrice}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="mb-3 col">
+                <label htmlFor="depositPrice" className="form-label">
+                  Deposit Price (Refundable)
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="depositPrice"
+                  name="depositPrice"
+                  value={postData.depositPrice}
                   onChange={handleInputChange}
                   required
                 />

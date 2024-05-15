@@ -16,7 +16,8 @@ const NewAd = (props) => {
     rentPeriod: "",
     location: "",
     condition: "",
-    price: "",
+    rentPrice: "",
+    depositPrice: "",
   });
 
   const handleInputChange = (e) => {
@@ -136,15 +137,29 @@ const NewAd = (props) => {
                 </select>
               </div>
               <div className="mb-3 col">
-                <label htmlFor="price" className="form-label">
-                  Price (Pkr/Month)
+                <label htmlFor="rentPrice" className="form-label">
+                  Rent Price (Pkr/Month)
                 </label>
                 <input
                   type="number"
                   className="form-control"
-                  id="price"
-                  name="price"
-                  value={postData.price}
+                  id="rentPrice"
+                  name="rentPrice"
+                  value={postData.rentPrice}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="mb-3 col">
+                <label htmlFor="depositPrice" className="form-label">
+                  Deposit Price (Refundable)
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="depositPrice"
+                  name="depositPrice"
+                  value={postData.depositPrice}
                   onChange={handleInputChange}
                   required
                 />
