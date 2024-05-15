@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import postsContext from "../context/postsContext";
-import Navbar from "./Navbar";
-import "../styles/postDetails.css";
+import React, {useContext, useState, useEffect} from "react";
 import { Link, useParams } from "react-router-dom";
+import Navbar from "./Navbar";
+import postsContext from "../context/postsContext";
 
-const PostDetails = () => {
+const OrderNow = () => {
   const { postId } = useParams();
   const context = useContext(postsContext);
   const { fetchbyID, postbyID } = context;
@@ -25,7 +24,6 @@ const PostDetails = () => {
     fetchData();
     // eslint-disable-next-line
   }, []);
-
   return (
     <>
       <Navbar></Navbar>
@@ -67,16 +65,15 @@ const PostDetails = () => {
                 </p>
               </div>
               <div className="price box">
-                <p className="">Rent Price: {postbyID.rentPrice} Pkr/Month</p>
-                <p className="">Deposit Price: {postbyID.depositPrice} (Refundable)</p>
+                <p className="">Price: {postbyID.price} Pkr/Month</p>
               </div>
-              <Link className="btn btn-dark" to={`/Ordernow/${postId}`}>Order now</Link>
+              
             </div>
           </div>
         )}
-      </div>
+      </div>{" "}
     </>
   );
 };
 
-export default PostDetails;
+export default OrderNow;

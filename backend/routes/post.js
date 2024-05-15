@@ -29,7 +29,8 @@ router.post(
     body("rentPeriod", "Rent period can not be empty").not().isEmpty(),
     body("location", "Location can not be empty").not().isEmpty(),
     body("condition", "Condition can not be empty").not().isEmpty(),
-    body("price", "Price can not be empty").not().isEmpty(),
+    body("rentPrice", "Rent Price can not be empty").not().isEmpty(),
+    body("depositPrice", "deposit Price can not be empty").not().isEmpty(),
   ],
   async (req, res) => {
     try {
@@ -37,8 +38,15 @@ router.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors });
       }
-      const { title, description, rentPeriod, location, condition, price } =
-        req.body;
+      const {
+        title,
+        description,
+        rentPeriod,
+        location,
+        condition,
+        rentPrice,
+        depositPrice,
+      } = req.body;
 
       const newPost = Post({
         user: req.user.id,
@@ -47,7 +55,8 @@ router.post(
         rentPeriod,
         location,
         condition,
-        price,
+        rentPrice,
+        depositPrice,
       });
       newPost.save();
 
@@ -96,7 +105,8 @@ router.put(
     body("rentPeriod", "Rent period can not be empty").not().isEmpty(),
     body("location", "Location can not be empty").not().isEmpty(),
     body("condition", "Condition can not be empty").not().isEmpty(),
-    body("price", "Price can not be empty").not().isEmpty(),
+    body("rentPrice", "Rent Price can not be empty").not().isEmpty(),
+    body("depositPrice", "deposit Price can not be empty").not().isEmpty(),
   ],
   async (req, res) => {
     try {
@@ -112,8 +122,15 @@ router.put(
         return res.status(401).send("UnAuthorized Access!");
       }
 
-      const { title, description, rentPeriod, location, condition, price } =
-        req.body;
+      const {
+        title,
+        description,
+        rentPeriod,
+        location,
+        condition,
+        rentPrice,
+        depositPrice,
+      } = req.body;
       const updatedPost = {
         user: req.user.id,
         title,
@@ -121,7 +138,8 @@ router.put(
         rentPeriod,
         location,
         condition,
-        price,
+        rentPrice,
+        depositPrice,
       };
 
       post = await Post.findByIdAndUpdate(

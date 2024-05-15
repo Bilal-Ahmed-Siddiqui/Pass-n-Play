@@ -28,7 +28,11 @@ const PostSchema = new Schema({
     type: Number,
     required: true,
   },
-  price: {
+  rentPrice: {
+    type: Number,
+    required: true,
+  },
+  depositPrice: {
     type: Number,
     required: true,
   },
