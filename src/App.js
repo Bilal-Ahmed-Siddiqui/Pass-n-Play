@@ -10,6 +10,7 @@ import EditAd from "./components/EditAd";
 import OrderNow from "./components/OrderNow";
 import EditProfile from "./components/EditProfile";
 import MyOrders from "./components/MyOrders";
+import OrderDetails from "./components/OrderDetails";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/OrderNow/:postId" exact element={<OrderNow />} />
           <Route path="/Editprofile" exact element={<EditProfile />} />
           <Route path="/Myorders" exact element={<MyOrders />} />
+          <Route path="/Orderdetails/:orderId" exact element={<OrderDetails />} />
           <Route path="*" exact element={<NotFound />} />
         </Routes>
       </Router>

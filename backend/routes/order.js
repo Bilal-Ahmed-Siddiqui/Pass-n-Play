@@ -78,4 +78,20 @@ router.post(
   }
 );
 
+// fetch order by id, GET, '/api/order/id'
+router.get("/:orderId", async (req, res) => {
+  try {
+    const order = await Order.findById({ _id: req.params.orderId });
+
+    if (!order) {
+      return res.status(404).json({ message: "order not found" });
+    }
+
+    res.json(order);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error!");
+  }
+});
+
 module.exports = router;
