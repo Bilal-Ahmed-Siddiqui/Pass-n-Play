@@ -45,7 +45,7 @@ const Home = () => {
         ) : (
           posts.map((post) => (
             <div style={{ flex: "0 0 calc(33.33% - 1rem)", margin: "1rem" }}>
-              <Post _id={post._id} title={post.title} price={post.price}></Post>
+              <Post _id={post._id} title={post.title} price={post.rentPrice}></Post>
             </div>
           ))
         )}
