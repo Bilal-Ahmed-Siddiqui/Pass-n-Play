@@ -58,6 +58,16 @@ const Sidebar = ({ isOpen, toggle }) => {
           </div>
         </Link>
         <Link
+          to="/myorders"
+          className="text-decoration-none link"
+          onClick={toggle}
+        >
+          <div className="list-group-item">
+            <i className="bi bi-bag"></i>
+            My Orders
+          </div>
+        </Link>
+        <Link
           to="/About"
           className="text-decoration-none link"
           onClick={toggle}

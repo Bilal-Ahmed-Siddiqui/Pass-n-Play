@@ -59,6 +59,7 @@ const OrderNow = () => {
     }
     const order = {
       post: postId,
+      title: postbyID.title,
       deliveryAddress: deliveryAddress,
       DeliveryPrice: 500,
       totalPrice: postbyID.depositPrice + 500,
@@ -68,7 +69,6 @@ const OrderNow = () => {
         postbyID.depositPrice - postbyID.rentPeriod * postbyID.rentPrice,
       returnDate: returnDate,
     };
-    console.log(order);
     try {
       const response = await fetch("http://localhost:8000/api/order/create", {
         method: "POST",
@@ -79,7 +79,10 @@ const OrderNow = () => {
         body: JSON.stringify(order),
       });
       const data = await response.json();
-      setorderId(data._id);
+      setorderId(data.order._id);
+      if (data.success) {
+        alert("order placed!");
+      }
     } catch (error) {
       setError(error);
     }
