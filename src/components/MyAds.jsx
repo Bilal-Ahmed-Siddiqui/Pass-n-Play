@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import Navbar from "./Navbar";
 import Post from "./Post";
 import NewAd from "./NewAd";
-import EditAd from "./EditAd";
 import "../styles/myAds.css";
 import postsContext from "../context/postsContext";
 import { useNavigate } from "react-router-dom";
