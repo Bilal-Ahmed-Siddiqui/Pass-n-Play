@@ -26,7 +26,7 @@ router.post(
   fetchUser,
   [
     body("DeliveryPrice", "Delivery Price can not be empty").not().isEmpty(),
-    body("DeliveryAddress", "Delivery Address can not be empty")
+    body("deliveryAddress", "Delivery Address can not be empty")
       .not()
       .isEmpty(),
     body("totalPrice", "total Price can not be empty").not().isEmpty(),
@@ -36,7 +36,6 @@ router.post(
       .not()
       .isEmpty(),
     body("returnDate", "return date can not be empty").not().isEmpty(),
-    body("status", "status period can not be empty").not().isEmpty(),
   ],
   async (req, res) => {
     try {
@@ -46,31 +45,28 @@ router.post(
       }
       const {
         post,
-        DeliveryAddress,
+        deliveryAddress,
         DeliveryPrice,
         totalPrice,
         rentAmount,
         depositAmount,
         returnableAmount,
         returnDate,
-        status,
       } = req.body;
 
       const newOrder = Order({
         user: req.user.id,
         post,
-        post,
-        DeliveryAddress,
+        deliveryAddress,
         DeliveryPrice,
         totalPrice,
         rentAmount,
         depositAmount,
         returnableAmount,
         returnDate,
-        status,
       });
-      newOrder.save();
-      res.send("Order Created");
+      const savedOrder = await newOrder.save();
+      res.json(savedOrder);
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal Server Error!");
