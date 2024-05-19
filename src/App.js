@@ -9,6 +9,7 @@ import { PostsState } from "./context/postsContext";
 import EditAd from "./components/EditAd";
 import OrderNow from "./components/OrderNow";
 import EditProfile from "./components/EditProfile";
+import MyOrders from "./components/MyOrders";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/MyAds" exact element={<MyAds />} />
           <Route path="/OrderNow/:postId" exact element={<OrderNow />} />
           <Route path="/Editprofile" exact element={<EditProfile />} />
+          <Route path="/Myorders" exact element={<MyOrders />} />
           <Route path="*" exact element={<NotFound />} />
         </Routes>
       </Router>

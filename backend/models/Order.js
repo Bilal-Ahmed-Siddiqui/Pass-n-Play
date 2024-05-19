@@ -13,6 +13,7 @@ const OrderSchema = new Schema({
     ref: "Post",
     required: true,
   },
+  title: { type: String, required: true },
   deliveryAddress: {
     type: String,
     required: true,
