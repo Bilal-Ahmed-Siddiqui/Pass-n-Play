@@ -2,12 +2,14 @@ import React, { useState, useContext, useEffect } from "react";
 import "../styles/newAd.css";
 import postsContext from "../context/postsContext";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const EditAd = () => {
   const { postId } = useParams();
 
   const context = useContext(postsContext);
   const { UpdatePost, fetchUserPost, fetchbyID, postbyID } = context;
+  const navigate = useNavigate();
 
   const [postData, setpostData] = useState({
     title: "",
@@ -21,20 +23,24 @@ const EditAd = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        await fetchbyID(postId);
-        console.log(postbyID)
-        await setpostData({
-          title: postbyID.title || "",
-          description: postbyID.description || "",
-          rentPeriod: postbyID.rentPeriod || "",
-          location: postbyID.location || "",
-          condition: postbyID.condition || "",
-          rentPrice: postbyID.rentPrice || "",
-          depositPrice: postbyID.depositPrice || "",
-        });
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      if (localStorage.getItem("token")) {
+        try {
+          await fetchbyID(postId);
+          console.log(postbyID);
+          setpostData({
+            title: postbyID.title || "",
+            description: postbyID.description || "",
+            rentPeriod: postbyID.rentPeriod || "",
+            location: postbyID.location || "",
+            condition: postbyID.condition || "",
+            rentPrice: postbyID.rentPrice || "",
+            depositPrice: postbyID.depositPrice || "",
+          });
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      } else {
+        navigate("/login");
       }
     };
     fetchData();
@@ -47,9 +53,9 @@ const EditAd = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(postData)
+    console.log(postData);
     e.preventDefault();
-    await UpdatePost(postId,postData);
+    await UpdatePost(postId, postData);
     await fetchUserPost();
   };
 

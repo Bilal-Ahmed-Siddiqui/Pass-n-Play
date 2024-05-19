@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import postsContext from "../context/postsContext";
+import { useNavigate } from "react-router-dom";
 
 const OrderNow = () => {
   const { postId } = useParams();
@@ -10,16 +11,21 @@ const OrderNow = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        await fetchbyID(postId);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Failed to fetch data. Please try again later.");
-        setLoading(false);
+      if (localStorage.getItem("token")) {
+        try {
+          await fetchbyID(postId);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          setError("Failed to fetch data. Please try again later.");
+          setLoading(false);
+        }
+      } else {
+        navigate("/login");
       }
     };
     fetchData();
@@ -87,10 +93,7 @@ const OrderNow = () => {
               </p>
               <p>Must be returned by: {returnDate.toDateString()}</p>
               <div className="mt-4">
-                <label
-                  htmlFor="deliveryAddress"
-                  className="block mb-2"
-                >
+                <label htmlFor="deliveryAddress" className="block mb-2">
                   Delivery Address:
                 </label>
                 <input
