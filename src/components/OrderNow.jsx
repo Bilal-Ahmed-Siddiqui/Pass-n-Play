@@ -1,5 +1,5 @@
-import React, {useContext, useState, useEffect} from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import postsContext from "../context/postsContext";
 
@@ -9,6 +9,7 @@ const OrderNow = () => {
   const { fetchbyID, postbyID } = context;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [returnDate, setReturnDate] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,6 +25,17 @@ const OrderNow = () => {
     fetchData();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    const calc_returnDate = () => {
+      const currentDate = new Date();
+      const futureDate = new Date(currentDate);
+      futureDate.setMonth(currentDate.getMonth() + postbyID.rentPeriod);
+      setReturnDate(futureDate);
+    };
+    calc_returnDate();
+    // eslint-disable-next-line
+  }, [postbyID]);
   return (
     <>
       <Navbar></Navbar>
@@ -43,35 +55,56 @@ const OrderNow = () => {
             <h5>{error}</h5>
           </div>
         ) : (
-          <div className="container">
-            <img
-              src="https://cdn11.bigcommerce.com/s-sp9oc95xrw/images/stencil/1280x1280/products/21427/75639/dvd-7__43230.1706547744.png?c=2"
-              className="post-details-img"
-              alt="Post"
-            />
-            <div className="detail-box">
-              <h5 className="title">{postbyID.title}</h5>
-              <div className="description box">
-                <p className="">
-                  <span>Description</span> {postbyID.description}{" "}
-                </p>
+          <div className="ml-52">
+            <div className="flex">
+              <div className="flex items-center">
+                <img
+                  src="https://cdn11.bigcommerce.com/s-sp9oc95xrw/images/stencil/1280x1280/products/21427/75639/dvd-7__43230.1706547744.png?c=2"
+                  className="w-80 h-auto"
+                  alt="Post"
+                />
+                <div className="ml-4 mt-4">
+                  <p className="font-bold text-[25px]">Ad Details</p>
+                  <p className="text-lg">Title: {postbyID.title}</p>
+                  <p className="text-lg">
+                    Rent Period: {postbyID.rentPeriod} Month(s)
+                  </p>
+                  <p>Price: {postbyID.rentPrice} Pkr/Month</p>
+                  <p>Price: {postbyID.depositPrice} (Returnable)</p>
+                </div>
               </div>
-              <div className="details box">
-                <p className="">Condition: {postbyID.condition} </p>
-                <p className="">Location: {postbyID.location} </p>
-                <p className="">Rent Period: {postbyID.rentPeriod} Month(s) </p>
-                <p className="">
-                  Posted On: {new Date(postbyID.timeStamp).toLocaleDateString()}
-                </p>
+            </div>
+            <div className="ml-8">
+              <p className="font-bold text-[25px]">Order Details</p>
+              <p>Rent Amount: {postbyID.rentPeriod * postbyID.rentPrice} Rs</p>
+              <p>Deposit Amount: {postbyID.depositPrice}</p>
+              <p>Delivery Charges: 500</p>
+              <p>Total: {postbyID.depositPrice + 500}</p>
+              <p>
+                Amount Returned after DVD is delivered back:{" "}
+                {postbyID.depositPrice -
+                  postbyID.rentPeriod * postbyID.rentPrice}
+              </p>
+              <p>Must be returned by: {returnDate.toDateString()}</p>
+              <div className="mt-4">
+                <label
+                  htmlFor="deliveryAddress"
+                  className="block mb-2"
+                >
+                  Delivery Address:
+                </label>
+                <input
+                  type="text"
+                  id="deliveryAddress"
+                  name="deliveryAddress"
+                  placeholder="Enter your delivery address"
+                  className="border rounded-md py-2 px-3 w-full"
+                />
               </div>
-              <div className="price box">
-                <p className="">Price: {postbyID.price} Pkr/Month</p>
-              </div>
-              
             </div>
           </div>
         )}
-      </div>{" "}
+      </div>
     </>
   );
 };
