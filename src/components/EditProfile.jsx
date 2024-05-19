@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
   const [data, setdata] = useState({
@@ -11,34 +12,42 @@ const EditProfile = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:8000/api/auth/getuser", {
-          method: "GET",
-          headers: {
-            "Content-Type": "Application/json",
-            "auth-token": localStorage.getItem("token"),
-          },
-        });
+      if (localStorage.getItem("token")) {
+        try {
+          const response = await fetch(
+            "http://localhost:8000/api/auth/getuser",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "Application/json",
+                "auth-token": localStorage.getItem("token"),
+              },
+            }
+          );
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
+          if (!response.ok) {
+            throw new Error("Failed to fetch data");
+          }
+
+          const data = await response.json();
+          setdata({
+            name: data.name || "",
+            email: data.email || "",
+            bank_Name: data.bank_Name || "",
+            bank_AccountTitle: data.bank_AccountTitle || "",
+            bank_AccountNumber: data.bank_AccountNumber || "",
+          });
+          setLoading(false);
+        } catch (err) {
+          setError(err);
+          setLoading(false);
         }
-
-        const data = await response.json();
-        setdata({
-          name: data.name || "",
-          email: data.email || "",
-          bank_Name: data.bank_Name || "",
-          bank_AccountTitle: data.bank_AccountTitle || "",
-          bank_AccountNumber: data.bank_AccountNumber || "",
-        });
-        setLoading(false);
-      } catch (err) {
-        setError(err);
-        setLoading(false);
+      } else {
+        navigate("/login");
       }
     };
 
@@ -56,7 +65,7 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
+      await fetch(
         "http://localhost:8000/api/auth/updateuser",
         {
           method: "PUT",
@@ -67,7 +76,7 @@ const EditProfile = () => {
           body: JSON.stringify(data),
         }
       );
-      alert("Info Updated Successfully")
+      alert("Info Updated Successfully");
     } catch (err) {
       setError(err);
     }
@@ -76,7 +85,7 @@ const EditProfile = () => {
   return (
     <>
       <Navbar />
-      <div >
+      <div>
         {loading ? (
           <div className="preloader text-center container-fluid my-3">
             <div
