@@ -10,11 +10,26 @@ const PostDetails = () => {
   const { fetchbyID, postbyID } = context;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [user, setuser] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         await fetchbyID(postId);
+        if (localStorage.getItem("token")) {
+          const response = await fetch(
+            "http://localhost:8000/api/auth/getuser",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "Application/json",
+                "auth-token": localStorage.getItem("token"),
+              },
+            }
+          );
+          const data = await response.json();
+          setuser(data._id);
+        }
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -68,9 +83,15 @@ const PostDetails = () => {
               </div>
               <div className="price box">
                 <p className="">Rent Price: {postbyID.rentPrice} Pkr/Month</p>
-                <p className="">Deposit Price: {postbyID.depositPrice} (Refundable)</p>
+                <p className="">
+                  Deposit Price: {postbyID.depositPrice} (Refundable)
+                </p>
               </div>
-              <Link className="btn btn-dark" to={`/Ordernow/${postId}`}>Order now</Link>
+              {postbyID.user !== user && (
+                <Link className="btn btn-dark" to={`/Ordernow/${postId}`}>
+                  Order now
+                </Link>
+              )}
             </div>
           </div>
         )}
