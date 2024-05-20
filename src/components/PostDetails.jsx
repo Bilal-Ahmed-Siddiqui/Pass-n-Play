@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import postsContext from "../context/postsContext";
 import Navbar from "./Navbar";
-import "../styles/postDetails.css";
+// import "../styles/postDetails.css";
 import { Link, useParams } from "react-router-dom";
 
 const PostDetails = () => {
@@ -60,35 +60,55 @@ const PostDetails = () => {
             <h5>{error}</h5>
           </div>
         ) : (
-          <div className="container">
+          <div className="container mx-auto p-4 flex">
             <img
               src="https://cdn11.bigcommerce.com/s-sp9oc95xrw/images/stencil/1280x1280/products/21427/75639/dvd-7__43230.1706547744.png?c=2"
-              className="post-details-img"
+              className="w-96 h-96 mb-4"
               alt="Post"
             />
-            <div className="detail-box">
-              <h5 className="title">{postbyID.title}</h5>
-              <div className="description box">
-                <p className="">
-                  <span>Description</span> {postbyID.description}{" "}
+            <div className="p-4 bg-white shadow-md rounded-md">
+              <h5 className="text-xl font-bold mb-2">{postbyID.title}</h5>
+              <div className="mb-4">
+                <p>
+                  <span className="font-semibold">Description: </span>
+                  {postbyID.description}
                 </p>
               </div>
-              <div className="details box">
-                <p className="">Condition: {postbyID.condition} </p>
-                <p className="">Location: {postbyID.location} </p>
-                <p className="">Rent Period: {postbyID.rentPeriod} Month(s) </p>
-                <p className="">
-                  Posted On: {new Date(postbyID.timeStamp).toLocaleDateString()}
-                </p>
-              </div>
-              <div className="price box">
-                <p className="">Rent Price: {postbyID.rentPrice} Pkr/Month</p>
-                <p className="">
-                  Deposit Price: {postbyID.depositPrice} (Refundable)
-                </p>
+              <div className="flex">
+                <div className="mb-4">
+                  <p>
+                    <span className="font-semibold">Condition: </span>
+                    {postbyID.condition}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Location: </span>
+                    {postbyID.location}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Posted On: </span>
+                    {new Date(postbyID.timeStamp).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className="mb-4 ml-20">
+                  <p>
+                    <span className="font-semibold">Rent Period: </span>
+                    {postbyID.rentPeriod} Month(s)
+                  </p>
+                  <p>
+                    <span className="font-semibold">Rent Price: </span>
+                    {postbyID.rentPrice} Pkr/Month
+                  </p>
+                  <p>
+                    <span className="font-semibold">Deposit Price: </span>
+                    {postbyID.depositPrice} (Refundable)
+                  </p>
+                </div>
               </div>
               {postbyID.user !== user && (
-                <Link className="btn btn-dark" to={`/Ordernow/${postId}`}>
+                <Link
+                  className="btn btn-dark bg-black text-white py-2 px-4 rounded-md"
+                  to={`/Ordernow/${postId}`}
+                >
                   Order now
                 </Link>
               )}
